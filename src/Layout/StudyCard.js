@@ -17,7 +17,7 @@ function StudyCard({ currentCards }) {
             setSideOfCard(true);
         }
         setStudyCard(orderedCards[studyCardCount])
-    }, [currentCards])
+    }, [currentCards,orderedCards, studyCardCount])
     
     const handleFlip = (e) => {
         e.preventDefault()

@@ -6,9 +6,10 @@ import { deleteDeck, listDecks } from "../utils/api";
 function Home({deck}) {
     const history = useHistory();
     const [decks, setDecks] = useState(null);
+   // const [cards, setCards]= useState(null);
     
     
-    useEffect(() => {
+ useEffect(() => {
         async function GetDecks() {
             setDecks([]);
             try {
@@ -23,7 +24,10 @@ function Home({deck}) {
         history.push("/decks/new")
     }
 
+
+
     if(decks){
+      console.log(decks);
         return (
             <div>
                 <button onClick={handleCreateDeck}> Create Deck</button>
@@ -37,7 +41,7 @@ function Home({deck}) {
                             <Link to={`/decks/${deck.id}/edit`}> Edit! </Link>
                             <Link to={`/decks/${deck.id}/study`}> Study! </Link>
                             <button onClick={() => {
-                        if(window.confirm("Would you like to delete this deck?")){
+                        if(window.confirm("Delete this deck?")){
                             deleteDeck(`${deck.id}`)
                             history.push("/")
                         }}}>

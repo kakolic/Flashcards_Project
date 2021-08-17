@@ -1,75 +1,75 @@
+
 import React from "react";
-import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useState, useEffect} from "react";
+import { Link, useParams } from "react-router-dom";
 import { createCard, readDeck } from "../utils/api";
+import CardForm from "./CardForm";
+
+//allows the user to create a new Card
 
 function AddCard() {
-    const {deckId} = useParams();
-    const history = useHistory();
-
-    const state = {front:"", back: ""};
-    const [cardData, setCardData]= useState(state);
-    const [deck, setDeck] = useState(null)
-    
-    
+ 
+    const { deckId } = useParams();
+   
+    const initializeForm = {
+      front: "",
+      back: "",
+      deckId,
+    };
+    const [card, setCard] = useState({ ...initializeForm });
+    const [deck, setDeck] = useState({});
+  
+   
     useEffect(() => {
-        const abortController = new AbortController();
-        const loadDeck = async () => {
-          const loadedDeck = await readDeck(deckId, abortController.signal);
-          setDeck(() => loadedDeck);
-        };
-        loadDeck();
-        return () => abortController.abort();
-      }, [deckId]);
-    
-
-    const handleDone = (e) => {
-        e.preventDefault();
-        history.push(`/decks/${deckId}`)
+      async function loadDeck() {
+        
+        const loadedDeck = await readDeck(deckId);
+        setDeck(loadedDeck);
+      }
+      loadDeck();
+    }, [deckId]);
+  
+  
+    function changeFront(e) {
+      setCard({ ...card, front: e.target.value });
     }
-
-    const handleSubmit = async (event) => { 
-        event.preventDefault();
-        const card = {cardData}
-       await createCard(deckId, card)
-       setCardData(state);
+    function changeBack(e) {
+      setCard({ ...card, back: e.target.value });
     }
-
-
-    if(deck){
-        return (
-            <div>
-                <div>
-                    <Link to="/">Home</Link> / <Link to={`/decks/${deckId}`}>{deck.name}</Link> / <div>Add Card</div>
-                </div>
-                <div>
-                    <h2>{cardData.name}: Add Card</h2>
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <label>Front</label>
-                    <br />
-                    <textarea
-                    required
-                    value={cardData.front}
-                    onChange={(e) => setCardData(e.target.value)}
-                    />
-                    <br />
-                    <label>Back</label>
-                    <br />
-                    <textarea
-                    required
-                    value={cardData.back}
-                    onChange={(e) => setCardData(e.target.value)}
-    
-                    />
-                    <br />
-                    <button onClick={handleDone}>Done</button>
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-        )
+  
+    function submitHandler(e) {
+      e.preventDefault();
+      async function updateData() {
+        await createCard(deckId, card);
+        setCard({ ...initializeForm });
+      }
+      updateData();
     }
-    return <p>Loading...</p>
-}
+  
+    return (
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </li>
+            <li className="breadcrumb-item">
+              <Link to={`/decks/${deckId}`}>{deck.name}</Link>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Add Card
+            </li>
+          </ol>
+        </nav>
+        <h4>{deck.name}: Add Card</h4>
+        <CardForm
+          submitHandler={submitHandler}
+          card={card}
+          changeFront={changeFront}
+          changeBack={changeBack}
+        />
+      </div>
+    );
+  }
+  
 export default AddCard;

@@ -6,7 +6,7 @@ import StudyCard from "./StudyCard";
 
 
 function Study() {
-    const params = useParams();
+    const {deckId} = useParams();
     const [currentDeck, setCurrentDeck] = useState(null)
     const [currentCards, setCurrentCards] = useState(null);
 
@@ -15,14 +15,14 @@ function Study() {
             setCurrentDeck([]);
             setCurrentCards([]);
             try {
-                const response = await readDeck(params.deckId);
+                const response = await readDeck(deckId);
                 setCurrentDeck(response);
                 const { cards } = response;
                 setCurrentCards(cards);
             } catch (error) {console.log(error)}
         }
         loadDeck()
-    }, [params])
+    }, [deckId])
 
     
     if(currentDeck){
