@@ -27,7 +27,6 @@ function Home({deck}) {
 
 
     if(decks){
-      console.log(decks);
         return (
             <div>
                 <button onClick={handleCreateDeck}> Create Deck</button>

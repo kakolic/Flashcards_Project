@@ -10,31 +10,29 @@ function CardForm({
     changeBack,
   }) {
     const history = useHistory();
-
     function cardFront() {
       return card.front ? card.front : "";
     }
- 
     function cardBack() {
       return card.back ? card.back : "";
     }
   
     return (
       <form>
-        <div class="form-group">
-          <label for="exampleFormControlInput1">Front</label>
+        <div className="form-group">
+          <label htmlFor="exampleFormControlInput1">Front</label>
           <textarea
-            class="form-control"
+            className="form-control"
             id="front"
             rows="3"
             value={cardFront()}
             onChange={changeFront}
           ></textarea>
         </div>
-        <div class="form-group">
-          <label for="exampleFormControlTextarea1">Deck Description</label>
+        <div className="form-group">
+          <label htmlFor="exampleFormControlTextarea1">Deck Description</label>
           <textarea
-            class="form-control"
+            className="form-control"
             id="exampleFormControlTextarea1"
             rows="3"
             value={cardBack()}

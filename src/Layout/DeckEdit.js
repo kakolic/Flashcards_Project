@@ -29,15 +29,20 @@ function DeckEdit() {
         return () => abortController.abort();
     }, [deckId]);
 
-    const handleSubmit = async(e) => {
+    function submitHandler(e) {
+        console.log(formData);
         e.preventDefault();
-        const deck = await updateDeck(formData);
-            history.push(`/decks/${deck.id}`)
-        }
+        updateDeck(formData).then(() => history.push(`/decks/${deckId}`));
+        
+      }
     
-    const handleChange = (event) => {
-        setFormData({ ...formData, [event.target.Name]: event.target.value });
-      };
+    function changeName(e) {
+    setFormData({ ...formData, name: e.target.value });
+  }
+
+  function changeDesc(e) {
+    setFormData({ ...formData, description: e.target.value });
+  }
 
     const handleCancel = (e) => {
         e.preventDefault();
@@ -51,23 +56,26 @@ function DeckEdit() {
                     <Link to="/">Home</Link> / <Link to={`/decks/${deckId}`}>{deck.name}</Link> / Edit Deck
                 </div>
                 <h2>Edit Deck</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit= {submitHandler} >
                     
                     <label>Name</label>
                     <br />
                         <input 
                         type="text"
                         required
-                        onChange={handleChange}
-                        value={formData.name}
+                        onChange={changeName}
+                        value= {formData.name}
+                        
                         />
                     <br />
                     <label>Description</label>
                     <br />
                         <textarea
                         required
-                        onChange={handleChange}
-                        value={formData.description}
+                        onChange={changeDesc}
+                        value= {formData.description}
+                        
+                        
                         />
                     <br />
                     <button onClick={handleCancel}>Cancel</button>
